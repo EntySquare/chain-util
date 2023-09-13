@@ -1,0 +1,15 @@
+.idea
+
+go.sum
+.dbdate
+client.key
+docs/docs.go
+docs/swagger.json
+docs/swagger.yaml
+vendor
+.DS_Store
+**/.DS_Store
+.DS_Store?
+log
+.log
+*.log

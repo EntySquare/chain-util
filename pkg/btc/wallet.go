@@ -50,7 +50,7 @@ func GenerateNestedSegWitAddressFromMnemonic(mnemonic string, params *chaincfg.P
 		return "", "", err
 	}
 
-	p2shAddress, err := publicKeyToP2SHAddress(publicKey, params)
+	p2shAddress, err := PublicKeyToP2SHAddress(publicKey, params)
 	if err != nil {
 		return "", "", err
 	}
@@ -104,7 +104,7 @@ func GenerateNativeSegWitAddressFromMnemonic(mnemonic string, params *chaincfg.P
 		return "", "", err
 	}
 
-	p2shAddress, err := publicKeyToP2WPKHAddress(publicKey, params)
+	p2shAddress, err := PublicKeyToP2WPKHAddress(publicKey, params)
 	if err != nil {
 		return "", "", err
 	}
@@ -158,7 +158,7 @@ func GenerateLegacyAddressFromMnemonic(mnemonic string, params *chaincfg.Params)
 		return "", "", err
 	}
 
-	p2shAddress, err := publicKeyToLegacyAddress(publicKey, params)
+	p2shAddress, err := PublicKeyToLegacyAddress(publicKey, params)
 	if err != nil {
 		return "", "", err
 	}
@@ -186,7 +186,7 @@ func GenerateNestedSegWitAddressFromPrivateKey(privateKeyString string, params *
 	publicKey := privateKey.PubKey()
 
 	// 生成 P2SH-P2WPKH 地址
-	p2shAddress, err := publicKeyToP2SHAddress(publicKey, params)
+	p2shAddress, err := PublicKeyToP2SHAddress(publicKey, params)
 	if err != nil {
 		return "", err
 	}
@@ -207,7 +207,7 @@ func GenerateNativeSegWitAddressFromPrivateKey(privateKeyString string, params *
 	// 从私钥生成公钥
 	publicKey := privateKey.PubKey()
 	// 生成 P2SH-P2WPKH 地址
-	p2wpkhAddress, err := publicKeyToP2WPKHAddress(publicKey, params)
+	p2wpkhAddress, err := PublicKeyToP2WPKHAddress(publicKey, params)
 	if err != nil {
 		return "", err
 	}
@@ -230,7 +230,7 @@ func GenerateLegacyAddressFromPrivateKey(privateKeyString string, params *chainc
 	publicKey := privateKey.PubKey()
 
 	// 生成 Legacy 地址
-	legacyAddress, err := publicKeyToLegacyAddress(publicKey, params)
+	legacyAddress, err := PublicKeyToLegacyAddress(publicKey, params)
 	if err != nil {
 		return "", err
 	}
@@ -238,8 +238,8 @@ func GenerateLegacyAddressFromPrivateKey(privateKeyString string, params *chainc
 	return legacyAddress.EncodeAddress(), nil
 }
 
-// 生成 P2SH-P2WPKH 地址
-func publicKeyToP2SHAddress(publicKey *btcec.PublicKey, Params *chaincfg.Params) (btcutil.Address, error) {
+// PublicKeyToP2SHAddress 生成 P2SH-P2WPKH 地址
+func PublicKeyToP2SHAddress(publicKey *btcec.PublicKey, Params *chaincfg.Params) (btcutil.Address, error) {
 	pubKeyHash := btcutil.Hash160(publicKey.SerializeCompressed())
 	script, err := txscript.NewScriptBuilder().
 		AddOp(txscript.OP_0).AddData(pubKeyHash).Script()
@@ -249,20 +249,20 @@ func publicKeyToP2SHAddress(publicKey *btcec.PublicKey, Params *chaincfg.Params)
 	return btcutil.NewAddressScriptHash(script, Params)
 }
 
-// 生成 P2WPKH 地址
-func publicKeyToP2WPKHAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
+// PublicKeyToP2WPKHAddress 生成 P2WPKH 地址
+func PublicKeyToP2WPKHAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
 	pubKeyHash := btcutil.Hash160(publicKey.SerializeCompressed())
 	return btcutil.NewAddressWitnessPubKeyHash(pubKeyHash, params)
 }
 
-// 生成 Legacy 地址
-func publicKeyToLegacyAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
+// PublicKeyToLegacyAddress 生成 Legacy 地址
+func PublicKeyToLegacyAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
 	pubKeyHash := btcutil.Hash160(publicKey.SerializeCompressed())
 	return btcutil.NewAddressPubKeyHash(pubKeyHash, params)
 }
 
-// 生成 Taproot 地址
-func publicKeyToTaprootAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
+// PublicKeyToTaprootAddress 生成 Taproot 地址
+func PublicKeyToTaprootAddress(publicKey *btcec.PublicKey, params *chaincfg.Params) (btcutil.Address, error) {
 	pubKeyHash := btcutil.Hash160(publicKey.SerializeCompressed())
 	return btcutil.NewAddressWitnessScriptHash(pubKeyHash, params)
 }
